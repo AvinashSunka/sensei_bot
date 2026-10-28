@@ -25,9 +25,9 @@ services:
   # ==========================================
   discord_bot_tests:
     build:
-      context: ./discord_bot
+      context: ./sensei_bot
     volumes:
-      - ./discord_bot:/app
+      - ./sensei_bot:/app
     working_dir: /app
     environment:
       DATABASE_URL: postgresql://admin:secretpassword@postgres:5432/sensei_db
@@ -40,11 +40,11 @@ services:
 
   discord_bot:
     build:
-      context: ./discord_bot
+      context: ./sensei_bot
     ports:
       - "8080:8080"
     volumes:
-      - ./discord_bot:/app
+      - ./sensei_bot:/app
     working_dir: /app
     environment:
       FLASK_APP: main.py
