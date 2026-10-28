@@ -1,0 +1,70 @@
+services:
+  # ==========================================
+  # DATABASES & CACHE
+  # ==========================================
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_DB: sensei_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
+  # ==========================================
+  # MICROSERVICES
+  # ==========================================
+  discord_bot_tests:
+    build:
+      context: ./discord_bot
+    volumes:
+      - ./discord_bot:/app
+    working_dir: /app
+    environment:
+      DATABASE_URL: postgresql://admin:secretpassword@postgres:5432/sensei_db
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    command: >
+      sh -c "python -m pytest -v --html=report.html --self-contained-html --css=report_style.css"
+
+  discord_bot:
+    build:
+      context: ./discord_bot
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./discord_bot:/app
+    working_dir: /app
+    environment:
+      FLASK_APP: main.py
+      FLASK_RUN_HOST: 0.0.0.0
+      FLASK_RUN_PORT: 8080
+      DISCORD_TOKEN: <DISCORD_TOKEN_FROM_DEVELOPERS_PORTAL> # purely for development purpose only
+      CLIENT_ID: <DISCORD_CLIENT_ID_FROM_DEVELOPERS_PORTAL> # purely for development purpose only
+      DATABASE_URL: postgresql://admin:secretpassword@postgres:5432/sensei_db
+      REDIS_URL: redis://redis:6379/0
+    command: python main.py 
+    depends_on:
+      discord_bot_tests:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+        
+# ==========================================
+# PERSISTENT VOLUMES
+# ==========================================
+volumes:
+  postgres_data:

@@ -1,0 +1,22 @@
+body, html {
+    background-color: #90EE90 !important;
+    color: black !important;
+}
+
+h1, h2, h3, p, span, th, td {
+    color: black !important;
+}
+
+tr.failed td, 
+tr.failed span {
+    color: #cc0000 !important;
+    font-weight: bold;
+}
+
+.log, 
+.error, 
+tr.test-run-events pre {
+    color: red !important;
+    background-color: #ffe6e6 !important;
+    border: 1px solid red !important;
+}
