@@ -51,7 +51,7 @@ services:
       FLASK_RUN_HOST: 0.0.0.0
       FLASK_RUN_PORT: 8080
       DISCORD_TOKEN: <DISCORD_TOKEN_FROM_DEVELOPERS_PORTAL> # purely for development purpose only
-      CLIENT_ID: <DISCORD_CLIENT_ID_FROM_DEVELOPERS_PORTAL> # purely for development purpose only    
+      CLIENT_ID: <DISCORD_CLIENT_ID_FROM_DEVELOPERS_PORTAL> # purely for development purpose only
       DATABASE_URL: postgresql://admin:secretpassword@postgres:5432/sensei_db
       REDIS_URL: redis://redis:6379/0
     command: python main.py 
