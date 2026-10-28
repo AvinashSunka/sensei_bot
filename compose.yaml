@@ -25,9 +25,9 @@ services:
   # ==========================================
   discord_bot_tests:
     build:
-      context: ./discord_bot
+      context: .
     volumes:
-      - ./discord_bot:/app
+      - .:/app
     working_dir: /app
     environment:
       DATABASE_URL: postgresql://admin:secretpassword@postgres:5432/sensei_db
@@ -40,18 +40,18 @@ services:
 
   discord_bot:
     build:
-      context: ./discord_bot
+      context: .
     ports:
       - "8080:8080"
     volumes:
-      - ./discord_bot:/app
+      - .:/app
     working_dir: /app
     environment:
       FLASK_APP: main.py
       FLASK_RUN_HOST: 0.0.0.0
       FLASK_RUN_PORT: 8080
       DISCORD_TOKEN: <DISCORD_TOKEN_FROM_DEVELOPERS_PORTAL> # purely for development purpose only
-      CLIENT_ID: <DISCORD_CLIENT_ID_FROM_DEVELOPERS_PORTAL> # purely for development purpose only
+      CLIENT_ID: <DISCORD_CLIENT_ID_FROM_DEVELOPERS_PORTAL> # purely for development purpose only    
       DATABASE_URL: postgresql://admin:secretpassword@postgres:5432/sensei_db
       REDIS_URL: redis://redis:6379/0
     command: python main.py 
